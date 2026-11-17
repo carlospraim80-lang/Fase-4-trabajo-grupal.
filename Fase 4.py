@@ -31,4 +31,21 @@ class ServicioNoDisponibleError(ErrorSistema):
 
 class ReservaError(ErrorSistema):
     pass
-  
+
+# Ahora como el trabajo debe basarse en una arquitectura orientada a objetos.
+# Empiezo a incluir lo siguiente:
+# Una clase Astracta que representa entidades generales del sistema
+# Representa los elementos generales del sistema.
+class Entidad(ABC):
+
+    def __init__(self, identificador):
+        self._id = identificador
+
+    @property
+    def id(self):
+        return self._id
+
+    @abstractmethod
+    def mostrar(self):
+        pass
+ 
