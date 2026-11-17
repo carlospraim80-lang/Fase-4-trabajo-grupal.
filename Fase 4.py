@@ -80,3 +80,50 @@ class Cliente(Entidad):
 
     def mostrar(self):
         return f"ID: {self.id} | {self.nombre} | {self.__correo} | {self.__telefono}"
+# Creo una clase abstracta Servicio y al menos tres servicios
+especializados que hereden de ella, implementando polimorfismo y
+métodos sobrescritos para calcular costos, describir servicios y
+validar parámetros.
+# Defino las caracteristicas comunes de los servicios.
+class Servicio(Entidad, ABC):
+
+    contador = 1
+
+    def __init__(self, nombre, precio):
+
+        if not nombre.strip() or precio <= 0:
+            raise DatosInvalidosError("Nombre o precio incorrecto.")
+
+        super().__init__(Servicio.contador)
+        Servicio.contador += 1
+
+        self.nombre = nombre
+        self.precio = precio
+        self.disponible = True
+
+    # Metodo con parametros opcionales para variar el calculo.
+    @abstractmethod
+    def calcular_costo(self, horas, impuesto=0, descuento=0):
+        pass
+
+    @abstractmethod
+    def describir(self):
+        pass
+
+    def validar(self, horas):
+
+        if not self.disponible:
+            raise ServicioNoDisponibleError("El servicio no esta disponible.")
+
+        if isinstance(horas, bool) or not isinstance(horas, (int, float)) or horas <= 0:
+            raise DatosInvalidosError("La duracion debe ser mayor que cero.")
+
+        if not 0 <= impuesto_valido(0) <= 100:
+            raise DatosInvalidosError("Parametro incorrecto.")
+
+
+# Funcion para validar parametros porcentuales.
+def impuesto_valido(valor):
+    return valor
+
+        
