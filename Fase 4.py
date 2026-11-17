@@ -48,4 +48,35 @@ class Entidad(ABC):
     @abstractmethod
     def mostrar(self):
         pass
- 
+ # Una clase Cliente con validaciones robustas y encapsulación de datos personales.
+# Permite registrar clientes y proteger sus datos.
+class Cliente(Entidad):
+
+    contador = 1
+
+    def __init__(self, nombre, correo, telefono):
+
+        # Valido los datos antes de crear el cliente.
+        if not nombre.strip():
+            raise DatosInvalidosError("El nombre es obligatorio.")
+
+        if not re.match(r"^[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}$", correo):
+            raise DatosInvalidosError("El correo no es valido.")
+
+        if not telefono.isdigit() or not 7 <= len(telefono) <= 15:
+            raise DatosInvalidosError("El telefono no es valido.")
+
+        super().__init__(Cliente.contador)
+        Cliente.contador += 1
+
+        # Los datos personales quedan encapsulados.
+        self.__nombre = nombre.strip()
+        self.__correo = correo.lower().strip()
+        self.__telefono = telefono
+
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    def mostrar(self):
+        return f"ID: {self.id} | {self.nombre} | {self.__correo} | {self.__telefono}"
