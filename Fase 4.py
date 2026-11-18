@@ -290,6 +290,72 @@ def crear_reserva(cliente, servicio, horas):
         logger.exception("Error al crear reserva.")
         print("Error:", error)
         return None
+#----        
+# 9. Pruebas automaticas: 10 operaciones
+def ejecutar_pruebas():
+
+    print("\n===== PRUEBAS DE SOFTWARE FJ =====")
+
+    # 1. Registro de cliente valido.
+    c1 = registrar_cliente("Carlos Perez", "carlos@gmail.com", "3101234567")
+
+    # 2. Registro de cliente invalido.
+    registrar_cliente("Andres", "correo_malo", "3001234567")
+
+    # 3. Registro de otro cliente valido.
+    c2 = registrar_cliente("Laura Gomez", "laura@gmail.com", "3201234567")
+
+    # 4. Creacion de sala.
+    sala = Sala("Sala principal", 50000, 10)
+    servicios.append(sala)
+    print("4. Servicio creado:", sala.describir())
+
+    # 5. Creacion de alquiler de equipos.
+    equipo = Equipo("Computador", 15000, 5)
+    servicios.append(equipo)
+    print("5. Servicio creado:", equipo.describir())
+
+    # 6. Creacion de asesoria.
+    asesoria = Asesoria("Asesoria tecnica", 80000, "Programacion")
+    servicios.append(asesoria)
+    print("6. Servicio creado:", asesoria.describir())
+
+    # 7. Intento de crear un servicio con precio invalido.
+    try:
+        Sala("Sala incorrecta", -5000, 10)
+    except ErrorSistema as error:
+        logger.exception("Error al crear servicio.")
+        print("7. Servicio rechazado:", error)
+
+    # 8. Creacion de una reserva correcta.
+    r1 = crear_reserva(c1, sala, 2)
+
+    # 9. Confirmacion de reserva con impuesto y descuento.
+    if r1:
+        r1.confirmar(impuesto=19, descuento=10)
+        print(r1.mostrar())
+
+    # 10. Reserva con servicio no disponible.
+    equipo.disponible = False
+    r2 = crear_reserva(c2, equipo, 2)
+
+    if r2:
+        try:
+            r2.confirmar()
+        except ReservaError as error:
+            logger.exception("Fallo al confirmar reserva.")
+            print("10. Reserva fallida:", error)
+
+    # Operaciones adicionales de cancelacion y calculo.
+    if r1:
+        r1.cancelar()
+        print("Reserva cancelada:", r1.mostrar())
+
+    print("\nTotal clientes:", len(clientes))
+    print("Total servicios:", len(servicios))
+    print("Total reservas:", len(reservas))
+
+    logger.info("Pruebas automaticas finalizadas.")
 
 
 
