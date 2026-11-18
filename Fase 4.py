@@ -253,7 +253,43 @@ class Reserva(Entidad):
 clientes = []
 servicios = []
 reservas = []
+#---
+# 8. Funciones de gestios 
+def registrar_cliente(nombre, correo, telefono):
 
+    try:
+        cliente = Cliente(nombre, correo, telefono)
+
+        if any(c._Cliente__correo == correo.lower().strip() for c in clientes):
+            raise DatosInvalidosError("El correo ya esta registrado.")
+
+        clientes.append(cliente)
+        logger.info(f"Cliente registrado: {nombre}")
+        print(cliente.mostrar())
+        return cliente
+
+    except ErrorSistema as error:
+        logger.exception("Error al registrar cliente.")
+        print("Error:", error)
+        return None
+
+    finally:
+        print("Finalizo el registro del cliente.")
+
+
+def crear_reserva(cliente, servicio, horas):
+
+    try:
+        reserva = Reserva(cliente, servicio, horas)
+        reservas.append(reserva)
+        logger.info(f"Reserva {reserva.id} creada.")
+        print("Reserva creada correctamente.")
+        return reserva
+
+    except ErrorSistema as error:
+        logger.exception("Error al crear reserva.")
+        print("Error:", error)
+        return None
 
 
 
