@@ -125,5 +125,75 @@ class Servicio(Entidad, ABC):
 # Funcion para validar parametros porcentuales.
 def impuesto_valido(valor):
     return valor
+#-----
+# 5. SERVICIOS ESPECIALIZADOS (Subclases)
+# Cada servicio hereda de Servicio y redefine sus metodos.
+class Sala(Servicio):
+
+    def __init__(self, nombre, precio, capacidad):
+        super().__init__(nombre, precio)
+
+        if capacidad <= 0:
+            raise DatosInvalidosError("Capacidad incorrecta.")
+
+        self.capacidad = capacidad
+
+    def calcular_costo(self, horas, impuesto=0, descuento=0):
+        self.validar(horas)
+
+        if not 0 <= impuesto <= 100 or not 0 <= descuento <= 100:
+            raise DatosInvalidosError("Impuesto o descuento incorrecto.")
+
+        subtotal = self.precio * horas
+        return round(subtotal * (1 + impuesto / 100) * (1 - descuento / 100), 2)
+
+    def describir(self):
+        return f"Sala {self.nombre} - Capacidad: {self.capacidad} personas"
+
+
+class Equipo(Servicio):
+
+    def __init__(self, nombre, precio, cantidad):
+        super().__init__(nombre, precio)
+
+        if cantidad <= 0:
+            raise DatosInvalidosError("Cantidad incorrecta.")
+
+        self.cantidad = cantidad
+
+    def calcular_costo(self, horas, impuesto=0, descuento=0):
+        self.validar(horas)
+
+        if not 0 <= impuesto <= 100 or not 0 <= descuento <= 100:
+            raise DatosInvalidosError("Impuesto o descuento incorrecto.")
+
+        subtotal = self.precio * horas
+        return round(subtotal * (1 + impuesto / 100) * (1 - descuento / 100), 2)
+
+    def describir(self):
+        return f"Alquiler de {self.nombre} - Cantidad: {self.cantidad}"
+
+
+class Asesoria(Servicio):
+
+    def __init__(self, nombre, precio, especialidad):
+        super().__init__(nombre, precio)
+
+        if not especialidad.strip():
+            raise DatosInvalidosError("La especialidad es obligatoria.")
+
+        self.especialidad = especialidad
+
+    def calcular_costo(self, horas, impuesto=0, descuento=0):
+        self.validar(horas)
+
+        if not 0 <= impuesto <= 100 or not 0 <= descuento <= 100:
+            raise DatosInvalidosError("Impuesto o descuento incorrecto.")
+
+        subtotal = self.precio * horas
+        return round(subtotal * (1 + impuesto / 100) * (1 - descuento / 100), 2)
+
+    def describir(self):
+        return f"Asesoria {self.nombre} - Especialidad: {self.especialidad}"
 
         
