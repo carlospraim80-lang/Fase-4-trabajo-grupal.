@@ -80,10 +80,7 @@ class Cliente(Entidad):
 
     def mostrar(self):
         return f"ID: {self.id} | {self.nombre} | {self.__correo} | {self.__telefono}"
-# Creo una clase abstracta Servicio y al menos tres servicios
-especializados que hereden de ella, implementando polimorfismo y
-métodos sobrescritos para calcular costos, describir servicios y
-validar parámetros.
+# Creo una clase abstracta Servicio y al menos tres servicios especializados que hereden de ella.
 # Defino las caracteristicas comunes de los servicios.
 class Servicio(Entidad, ABC):
 
@@ -195,5 +192,63 @@ class Asesoria(Servicio):
 
     def describir(self):
         return f"Asesoria {self.nombre} - Especialidad: {self.especialidad}"
+#  Creo una clase Reserva
+# Relaciona un cliente con el servicio que desea utilizar.
+class Reserva(Entidad):
+
+    contador = 1
+
+    def __init__(self, cliente, servicio, horas):
+
+        if not isinstance(cliente, Cliente) or not isinstance(servicio, Servicio):
+            raise ReservaError("Cliente o servicio incorrecto.")
+
+        if isinstance(horas, bool) or not isinstance(horas, (int, float)) or horas <= 0:
+            raise ReservaError("La duracion de la reserva no es valida.")
+
+        super().__init__(Reserva.contador)
+        Reserva.contador += 1
+
+        self.cliente = cliente
+        self.servicio = servicio
+        self.horas = horas
+        self.estado = "Pendiente"
+        self.costo = 0
+
+    # Proceso y confirmo la reserva.
+    def confirmar(self, impuesto=0, descuento=0):
+
+        try:
+            self.costo = self.servicio.calcular_costo(
+                self.horas, impuesto, descuento
+            )
+
+        except Exception as error:
+            logger.exception("Error al procesar la reserva.")
+
+            # Encadeno el error original con uno personalizado.
+            raise ReservaError("No se pudo procesar la reserva.") from error
+
+        else:
+            self.estado = "Confirmada"
+            print("Reserva confirmada correctamente.")
+
+        finally:
+            logger.info(f"Finalizo el procesamiento de reserva {self.id}.")
+
+    def cancelar(self):
+
+        if self.estado != "Pendiente" and self.estado != "Confirmada":
+            raise ReservaError("La reserva no se puede cancelar.")
+
+        self.estado = "Cancelada"
+        logger.info(f"Reserva {self.id} cancelada.")
+
+    def mostrar(self):
+        return (f"Reserva {self.id} | Cliente: {self.cliente.nombre} | "
+                f"Servicio: {self.servicio.nombre} | Estado: {self.estado} | "
+                f"Costo: ${self.costo}")
+
+
 
         
