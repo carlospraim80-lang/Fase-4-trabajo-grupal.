@@ -123,7 +123,7 @@ class Servicio(Entidad, ABC):
 def impuesto_valido(valor):
     return valor
 #-----
-# 5. SERVICIOS ESPECIALIZADOS (Subclases)
+# 5. Servicios especializados (Subclases)
 # Cada servicio hereda de Servicio y redefine sus metodos.
 class Sala(Servicio):
 
@@ -248,6 +248,13 @@ class Reserva(Entidad):
         return (f"Reserva {self.id} | Cliente: {self.cliente.nombre} | "
                 f"Servicio: {self.servicio.nombre} | Estado: {self.estado} | "
                 f"Costo: ${self.costo}")
+# 7. Creo listas internas del sistema.
+# Guardo los objetos en listas, sin utilizar bases de datos.
+clientes = []
+servicios = []
+reservas = []
+
+
 
 
 
