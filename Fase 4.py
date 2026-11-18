@@ -450,7 +450,21 @@ def menu():
 
         finally:
             print("Fin de la operacion.")
+#-------------------
+# 11. INICIO DEL PROGRAMA
 
+if __name__ == "__main__":
+
+    try:
+        logger.info("Inicio del sistema Software FJ.")
+        menu()
+
+    except KeyboardInterrupt:
+        print("\nPrograma interrumpido.")
+
+    finally:
+        logger.info("Finalizacion del sistema Software FJ.")
+        print("Sistema finalizado.")
 
 
 
