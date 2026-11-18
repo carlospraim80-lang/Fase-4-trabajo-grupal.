@@ -356,6 +356,100 @@ def ejecutar_pruebas():
     print("Total reservas:", len(reservas))
 
     logger.info("Pruebas automaticas finalizadas.")
+    
+# 10. Menu principal por consola.
+# -----
+def menu():
+
+    while True:
+        print("\n====== SISTEMA SOFTWARE FJ ======")
+        print("1. Registrar cliente")
+        print("2. Consultar clientes")
+        print("3. Consultar servicios")
+        print("4. Crear reserva")
+        print("5. Confirmar reserva")
+        print("6. Cancelar reserva")
+        print("7. Consultar reservas")
+        print("8. Ejecutar pruebas automaticas")
+        print("0. Salir")
+
+        try:
+            opcion = input("Seleccione una opcion: ").strip()
+
+            if opcion == "1":
+                registrar_cliente(
+                    input("Nombre: "),
+                    input("Correo: "),
+                    input("Telefono: "))
+
+            elif opcion == "2":
+                for c in clientes:
+                    print(c.mostrar())
+
+            elif opcion == "3":
+                for s in servicios:
+                    print(s.id, s.describir())
+
+            elif opcion == "4":
+                id_c = int(input("ID del cliente: "))
+                id_s = int(input("ID del servicio: "))
+
+                c = next((x for x in clientes if x.id == id_c), None)
+                s = next((x for x in servicios if x.id == id_s), None)
+
+                if c is None or s is None:
+                    raise ReservaError("Cliente o servicio no encontrado.")
+
+                horas = float(input("Duracion en horas: "))
+                crear_reserva(c, s, horas)
+
+            elif opcion == "5":
+                id_r = int(input("ID de reserva: "))
+                r = next((x for x in reservas if x.id == id_r), None)
+
+                if r is None:
+                    raise ReservaError("Reserva no encontrada.")
+
+                r.confirmar(impuesto=19)
+
+            elif opcion == "6":
+                id_r = int(input("ID de reserva: "))
+                r = next((x for x in reservas if x.id == id_r), None)
+
+                if r is None:
+                    raise ReservaError("Reserva no encontrada.")
+
+                r.cancelar()
+                print("Reserva cancelada.")
+
+            elif opcion == "7":
+                for r in reservas:
+                    print(r.mostrar())
+
+            elif opcion == "8":
+                ejecutar_pruebas()
+
+            elif opcion == "0":
+                print("Gracias por utilizar Software FJ.")
+                logger.info("Sistema cerrado por el usuario.")
+                break
+
+            else:
+                raise DatosInvalidosError("Opcion incorrecta.")
+
+        except (ValueError, ErrorSistema) as error:
+            logger.exception("Error controlado en el menu.")
+            print("No se pudo realizar la operacion:", error)
+
+        except Exception as error:
+            logger.exception("Error inesperado en el sistema.")
+            print("Se presento un error inesperado:", error)
+
+        else:
+            logger.info(f"Operacion de menu {opcion} finalizada.")
+
+        finally:
+            print("Fin de la operacion.")
 
 
 
