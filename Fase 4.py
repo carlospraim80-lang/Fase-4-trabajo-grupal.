@@ -123,7 +123,7 @@ class Servicio(Entidad, ABC):
 def impuesto_valido(valor):
     return valor
 #-----
-# 5. Servicios especializados (Subclases)
+# Servicios especializados (Subclases)
 # Cada servicio hereda de Servicio y redefine sus metodos.
 class Sala(Servicio):
 
@@ -248,13 +248,13 @@ class Reserva(Entidad):
         return (f"Reserva {self.id} | Cliente: {self.cliente.nombre} | "
                 f"Servicio: {self.servicio.nombre} | Estado: {self.estado} | "
                 f"Costo: ${self.costo}")
-# 7. Creo listas internas del sistema.
+# Creo listas internas del sistema.
 # Guardo los objetos en listas, sin utilizar bases de datos.
 clientes = []
 servicios = []
 reservas = []
 #---
-# 8. Funciones de gestios 
+# Funciones de gestios 
 def registrar_cliente(nombre, correo, telefono):
 
     try:
@@ -291,7 +291,7 @@ def crear_reserva(cliente, servicio, horas):
         print("Error:", error)
         return None
 #----        
-# 9. Pruebas automaticas: 10 operaciones
+# Pruebas automaticas: 10 operaciones
 def ejecutar_pruebas():
 
     print("\n===== PRUEBAS DE SOFTWARE FJ =====")
@@ -357,7 +357,7 @@ def ejecutar_pruebas():
 
     logger.info("Pruebas automaticas finalizadas.")
     
-# 10. Menu principal por consola.
+# Menu principal por consola.
 # -----
 def menu():
 
@@ -451,7 +451,7 @@ def menu():
         finally:
             print("Fin de la operacion.")
 #-------------------
-# 11. INICIO DEL PROGRAMA
+# Inicio del programa.
 
 if __name__ == "__main__":
 
